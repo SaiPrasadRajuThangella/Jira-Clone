@@ -1,11 +1,10 @@
 const buttons = document.getElementsByClassName("btn");
 const inputs = document.querySelectorAll("section>div>input");
+const cardContainer = document.getElementById("cardContainer");
 
-
-function deleteCard(event){
-     event.target.parentNode.remove();
+function deleteCard(event) {
+  event.target.parentNode.remove();
 }
-
 
 for (let i = 0; i < inputs.length; i++) {
   inputs[i].addEventListener("keyup", createCard);
@@ -14,7 +13,6 @@ for (let i = 0; i < inputs.length; i++) {
 for (let i = 0; i < buttons.length; i++) {
   buttons[i].addEventListener("click", createInput);
 }
-
 
 function createInput(event) {
   const input = event.target.nextElementSibling;
@@ -25,27 +23,31 @@ function createInput(event) {
 
   event.target.parentNode.appendChild(note);
 }
+
 function createCard(event) {
   if (event.keyCode === 13) {
     let taskName = event.target.value;
     const card = document.createElement("div");
     card.className = "card";
+    card.id=event.target.value;
 
+    
     card.innerHTML = `
     <b>${taskName}</b> 
     <button onclick="deleteCard(event)">Delete</button>
     `;
+    card.draggable = true;
+    card.addEventListener("dragstart", (event) => {
+      event.dataTransfer.setData("cardId",event.target.id)
+     });
+
     let cardContainer = event.target.nextElementSibling;
-    
+
     cardContainer.appendChild(card);
+
     event.target.value = "";
     event.target.className = "hide";
     const note = document.getElementById("note");
     note.remove();
-
-
-
-   
-           
   }
 }
